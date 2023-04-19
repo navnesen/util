@@ -6,6 +6,7 @@ import com.github.navnesen.async.common.AwaitableResult;
 import com.github.navnesen.sync.Mutex;
 import com.github.navnesen.util.Result;
 import com.github.navnesen.util.common.InspectAction;
+import com.github.navnesen.util.common.TypeAction;
 import com.github.navnesen.util.common.TypeActionMap;
 
 public class AsyncResult<T> implements AwaitableResult<T> {
@@ -121,6 +122,10 @@ public class AsyncResult<T> implements AwaitableResult<T> {
 
 	public <U> AsyncResult<U> mapOr(TypeActionMap<T, U> action, T defaultValue) {
 		return new AsyncResult<>(() -> this.await().mapOr(action, defaultValue));
+	}
+
+	public <U> AsyncResult<U> mapOrElse(TypeActionMap<T, U> action, TypeAction<T> defaultValueFn) {
+		return new AsyncResult<>(() -> this.await().mapOrElse(action, defaultValueFn));
 	}
 
 	public AsyncResult<T> mapErr(TypeActionMap<Throwable, Throwable> action) {
