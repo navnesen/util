@@ -11,6 +11,10 @@ import java.util.concurrent.atomic.AtomicReference;
  * @param <T>
  */
 public class Mutex<T> {
+	public static <T> Mutex<T> of(T value) {
+		return new Mutex<>(value);
+	}
+
 	protected T value;
 	protected final AtomicReference<List<Locked<T>>> waiters = new AtomicReference<>(new ArrayList<>());
 	protected final AtomicReference<Boolean> locked = new AtomicReference<>(false);
