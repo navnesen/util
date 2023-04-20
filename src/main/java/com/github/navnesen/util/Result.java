@@ -89,6 +89,10 @@ public class Result<O, E> {
 		return this.expect("could not unwrap value");
 	}
 
+	public O unwrapUnchecked() {
+		return this.value;
+	}
+
 	public E expectErr(String message) {
 		if (this.isOk()) throw new RuntimeException(message);
 		return this.exception;
@@ -96,6 +100,10 @@ public class Result<O, E> {
 
 	public E unwrapErr() {
 		return this.expectErr("could not unwrap error");
+	}
+
+	public E unwrapErrUnchecked() {
+		return this.exception;
 	}
 
 	public <U> Result<U, E> and(Result<U, E> res) {
