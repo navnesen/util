@@ -53,6 +53,10 @@ public class Option<T> {
 		return this.value;
 	}
 
+	public T unwrapUnchecked() {
+		return this.value;
+	}
+
 	public <U> Option<U> map(TypeActionMap<T, U> action) {
 		if (!this.hasValue) return Option.none();
 		return Option.some(action.run(this.value));
