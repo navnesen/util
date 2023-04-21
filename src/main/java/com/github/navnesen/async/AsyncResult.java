@@ -120,7 +120,7 @@ public class AsyncResult<T> implements AwaitableResult<T> {
 		return result.unwrapUnchecked();
 	}
 
-	protected synchronized void complete(Result<T, Throwable> result) throws Exception {
+	protected void complete(Result<T, Throwable> result) throws Exception {
 		try (var value = this.internalResult.lock()) {
 			if (value.get() != null) {
 				throw new Exception("Async result is already completed!");
