@@ -4,6 +4,7 @@ import com.github.navnesen.async.common.AsyncAction;
 import com.github.navnesen.async.common.AsyncActionResult;
 import com.github.navnesen.async.common.AwaitableResult;
 import com.github.navnesen.sync.Mutex;
+import com.github.navnesen.util.Dirty;
 import com.github.navnesen.util.Result;
 import com.github.navnesen.util.common.InspectAction;
 import com.github.navnesen.util.common.TypeAction;
@@ -54,7 +55,7 @@ public class AsyncResult<T> implements AwaitableResult<T> {
 
 			try {
 				this.complete(completion);
-			} catch (Exception e) {
+			} catch (Throwable e) {
 				// will not happen
 			}
 		}).start();
@@ -84,9 +85,13 @@ public class AsyncResult<T> implements AwaitableResult<T> {
 			try {
 				this.complete(completion);
 			} catch (Exception e) {
-				// will not happen
+				// this.complete() has throws in method signature. It only
+				// throws when complete() has already been called. Which won't
+				// happen here. If it does, the developer has attempted to use
+				// UB which will not be supported. In this regard, the
+				// exception can be safely ignored.
 			}
-		}).start();
+		}).
 	}
 
 	public synchronized Result<T, Throwable> await() {
@@ -105,6 +110,14 @@ public class AsyncResult<T> implements AwaitableResult<T> {
 			}
 		}
 		return result;
+	}
+
+	public T unwrap() {
+		var result = this.await();
+		if (result.isErr()) {
+			Dirty.raise(result.unwrapErrUnchecked());
+		}
+		return result.unwrapUnchecked();
 	}
 
 	protected synchronized void complete(Result<T, Throwable> result) throws Exception {
