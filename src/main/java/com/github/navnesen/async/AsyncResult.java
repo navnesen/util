@@ -94,7 +94,7 @@ public class AsyncResult<T> implements AwaitableResult<T> {
 		}).start();
 	}
 
-	public synchronized Result<T, Throwable> await() {
+	public Result<T, Throwable> await() {
 		Result<T, Throwable> result;
 		try (var value = this.internalResult.lock()) {
 			result = value.get();
