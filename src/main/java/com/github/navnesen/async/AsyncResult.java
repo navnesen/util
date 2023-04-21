@@ -153,19 +153,19 @@ public class AsyncResult<T> implements AwaitableResult<T> {
 		return new AsyncResult<>(() -> this.await().inspectErr(action));
 	}
 
-	public <U> AsyncResult<U> and(AsyncResult<U> res) {
+	public <U> AsyncResult<U> and(AwaitableResult<U> res) {
 		return new AsyncResult<U>(() -> this.await().and(res.await()));
 	}
 
-	public <U> AsyncResult<U> andThen(TypeActionMap<T, AsyncResult<U>> action) {
+	public <U> AsyncResult<U> andThen(TypeActionMap<T, AwaitableResult<U>> action) {
 		return new AsyncResult<>(() -> this.await().andThen((value) -> action.run(value).await()));
 	}
 
-	public AsyncResult<T> or(AsyncResult<T> res) {
+	public AsyncResult<T> or(AwaitableResult<T> res) {
 		return new AsyncResult<>(() -> this.await().or(res.await()));
 	}
 
-	public AsyncResult<T> orElse(TypeActionMap<Throwable, AsyncResult<T>> action) {
+	public AsyncResult<T> orElse(TypeActionMap<Throwable, AwaitableResult<T>> action) {
 		return new AsyncResult<>(() -> this.await().orElse((exception) -> action.run(exception).await()));
 	}
 }
