@@ -91,7 +91,7 @@ public class AsyncResult<T> implements AwaitableResult<T> {
 				// UB which will not be supported. In this regard, the
 				// exception can be safely ignored.
 			}
-		}).
+		}).start();
 	}
 
 	public synchronized Result<T, Throwable> await() {

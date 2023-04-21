@@ -74,6 +74,7 @@ public class ReadableStream<T> {
 	protected void releaseFrom(Reader<T> reader) {
 		try (var _currentReader = this._currentReader.lock()) {
 			// verify current reader
+			// noinspection resource
 			if (_currentReader.get().expect("no active reader") != reader) {
 				throw new RuntimeException("current reader is not the same as the provided reader");
 			}
